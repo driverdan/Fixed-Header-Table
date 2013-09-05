@@ -70,7 +70,9 @@
             $divHead,
             $divBody,
             $fixedBody,
-            widthMinusScrollbar;
+            widthMinusScrollbar,
+            tableProps,
+            tbodyHeight;
 
         settings.originalTable = $(this).clone();
         settings.includePadding = helpers._isPaddingIncludedWithWidth();
@@ -119,7 +121,7 @@
 
         $divBody = $self.closest('.fht-tbody');
 
-        var tableProps = helpers._getTableProps($self);
+        tableProps = helpers._getTableProps($self);
 
         helpers._setupClone($divBody, tableProps.tbody);
 
@@ -156,7 +158,7 @@
           tfootHeight = $tfoot.outerHeight(true);
         }
 
-        var tbodyHeight = $wrapper.height() - $thead.outerHeight(true) - tfootHeight - tableProps.border;
+        tbodyHeight = $wrapper.height() - $thead.outerHeight(true) - tfootHeight - tableProps.border;
 
         $divBody.css({
           'height': tbodyHeight
@@ -389,7 +391,10 @@
             $firstTdChildren,
             fixedColumnWidth,
             $newRow,
-            firstTdChildrenSelector;
+            firstTdChildrenSelector,
+            tdWidths,
+            maxTop,
+            $firstTdFootChild;
 
         $thead.find('table.fht-table').addClass(settings.originalTable.attr('class'));
         $tbody.find('table.fht-table').addClass(settings.originalTable.attr('class'));
@@ -405,7 +410,7 @@
         helpers._fixHeightWithCss($firstThChildren, tableProps);
         helpers._fixWidthWithCss($firstThChildren, tableProps);
 
-        var tdWidths = [];
+        tdWidths = [];
         $firstThChildren.each(function() {
           tdWidths.push($(this).width());
         });
@@ -449,7 +454,7 @@
 
 
         // bind mousewheel events
-        var maxTop = $fixedColumn.find('.fht-tbody .fht-table').height() - $fixedColumn.find('.fht-tbody').height();
+        maxTop = $fixedColumn.find('.fht-tbody .fht-table').height() - $fixedColumn.find('.fht-tbody').height();
         $fixedColumn.find('.fht-table').bind('mousewheel', function(event, delta, deltaX, deltaY) {
           if (!deltaY) {
             return;
@@ -474,7 +479,7 @@
 
         // setup clone footer with fixed column
         if (settings.footer || settings.cloneHeadToFoot) {
-          var $firstTdFootChild = $fixedBody.find('.fht-tfoot tr > *:lt(' + settings.fixedColumns + ')'),
+          $firstTdFootChild = $fixedBody.find('.fht-tfoot tr > *:lt(' + settings.fixedColumns + ')'),
               footwidth;
 
           helpers._fixHeightWithCss($firstTdFootChild, tableProps);
@@ -496,7 +501,8 @@
       _setupTableFooter: function ($obj, obj, tableProps) {
         var $wrapper  = $obj.closest('.fht-table-wrapper'),
             $tfoot    = $obj.find('tfoot'),
-            $divFoot  = $wrapper.find('div.fht-tfoot');
+            $divFoot  = $wrapper.find('div.fht-tfoot'),
+            $divHead;
 
         if (!$divFoot.length) {
           if (settings.fixedColumns > 0) {
@@ -510,7 +516,7 @@
         switch (true) {
           case !$tfoot.length && settings.cloneHeadToFoot && settings.footer:
 
-            var $divHead = $wrapper.find('div.fht-thead');
+            $divHead = $wrapper.find('div.fht-thead');
 
             $divFoot.empty();
             $divHead.find('table')
@@ -578,7 +584,8 @@
               ($obj.find('tfoot').length) ?
               'tfoot tr:first-child > *' :
               'tbody tr:first-child > *',
-            $cell;
+            $cell,
+            padding;
 
         $obj.find(selector).each(function(index) {
           $cell = ($(this).find('div.fht-cell').length) ? $(this).find('div.fht-cell') : $('<div class="fht-cell"></div>').appendTo($(this));
@@ -592,7 +599,7 @@
            * to align with the scrollbar of the body
            */
           if (!$(this).closest('.fht-tbody').length && $(this).is(':last-child') && !$(this).closest('.fht-fixed-column').length) {
-            var padding = Math.max((($(this).innerWidth() - $(this).width()) / 2), settings.scrollbarOffset);
+            padding = Math.max((($(this).innerWidth() - $(this).width()) / 2), settings.scrollbarOffset);
             $(this).css({
                 'padding-right': padding + 'px'
             });
@@ -635,22 +642,25 @@
        * get the width of the browsers scroll bar
        */
       _getScrollbarWidth: function() {
-        var scrollbarWidth = 0;
+        var scrollbarWidth = 0,
+            $textarea1,
+            $textarea2,
+            $div;
 
         if (!scrollbarWidth) {
           if (/msie/.test(navigator.userAgent.toLowerCase())) {
-            var $textarea1 = $('<textarea cols="10" rows="2"></textarea>')
-                  .css({ position: 'absolute', top: -1000, left: -1000 }).appendTo('body'),
-                $textarea2 = $('<textarea cols="10" rows="2" style="overflow: hidden;"></textarea>')
-                  .css({ position: 'absolute', top: -1000, left: -1000 }).appendTo('body');
+            $textarea1 = $('<textarea cols="10" rows="2"></textarea>')
+              .css({ position: 'absolute', top: -1000, left: -1000 }).appendTo('body');
+            $textarea2 = $('<textarea cols="10" rows="2" style="overflow: hidden;"></textarea>')
+              .css({ position: 'absolute', top: -1000, left: -1000 }).appendTo('body');
 
             scrollbarWidth = $textarea1.width() - $textarea2.width() + 2; // + 2 for border offset
             $textarea1.add($textarea2).remove();
           } else {
-            var $div = $('<div />')
-                  .css({ width: 100, height: 100, overflow: 'auto', position: 'absolute', top: -1000, left: -1000 })
-                  .prependTo('body').append('<div />').find('div')
-                  .css({ width: '100%', height: 200 });
+            $div = $('<div />')
+              .css({ width: 100, height: 100, overflow: 'auto', position: 'absolute', top: -1000, left: -1000 })
+              .prependTo('body').append('<div />').find('div')
+              .css({ width: '100%', height: 200 });
 
             scrollbarWidth = 100 - $div.width();
             $div.parent().remove();
