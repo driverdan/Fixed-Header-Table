@@ -63,7 +63,6 @@
        */
       setup: function () {
         var $self       = $(this),
-            self        = this,
             $thead      = $self.find('thead'),
             $tfoot      = $self.find('tfoot'),
             tfootHeight = 0,
@@ -148,7 +147,7 @@
          * Setup footer if present
          */
         if (settings.footer) {
-          helpers._setupTableFooter($self, self, tableProps);
+          helpers._setupTableFooter($self, this, tableProps);
 
           if (!$tfoot.length) {
             $tfoot = $wrapper.find('div.fht-tfoot table');
@@ -166,20 +165,20 @@
         $self.addClass('fht-table-init');
 
         if (typeof(settings.altClass) !== 'undefined') {
-          methods.altRows.apply(self);
+          methods.altRows.apply(this);
         }
 
         if (settings.fixedColumns > 0) {
-          helpers._setupFixedColumn($self, self, tableProps);
+          helpers._setupFixedColumn($self, this, tableProps);
         }
 
         if (!settings.autoShow) {
           $wrapper.hide();
         }
 
-        helpers._bindScroll($divBody, tableProps);
+        helpers._bindScroll($divBody);
 
-        return self;
+        return this;
       },
 
       /*
@@ -187,8 +186,7 @@
        * Incomplete - not implemented yet
        */
       resize: function() {
-        var self  = this;
-        return self;
+        return this;
       },
 
       /*
@@ -208,7 +206,6 @@
        */
       show: function(arg1, arg2, arg3) {
         var $self   = $(this),
-            self      = this,
             $wrapper  = $self.closest('.fht-table-wrapper');
 
         // User provided show duration without a specific effect
@@ -217,7 +214,7 @@
             $.isFunction(arg2) && arg2.call(this);
           });
 
-          return self;
+          return this;
 
         } else if (typeof(arg1) !== 'undefined' && typeof(arg1) === 'string' &&
           typeof(arg2) !== 'undefined' && typeof(arg2) === 'number') {
@@ -227,7 +224,7 @@
             $.isFunction(arg3) && arg3.call(this);
           });
 
-          return self;
+          return this;
 
         }
 
@@ -235,7 +232,7 @@
           .show();
         $.isFunction(arg1) && arg1.call(this);
 
-        return self;
+        return this;
       },
 
       /*
@@ -243,7 +240,6 @@
        */
       hide: function(arg1, arg2, arg3) {
         var $self     = $(this),
-            self    = this,
             $wrapper  = $self.closest('.fht-table-wrapper');
 
         // User provided show duration without a specific effect
@@ -252,7 +248,7 @@
             $.isFunction(arg3) && arg3.call(this);
           });
 
-          return self;
+          return this;
         } else if (typeof(arg1) !== 'undefined' && typeof(arg1) === 'string' &&
           typeof(arg2) !== 'undefined' && typeof(arg2) === 'number') {
 
@@ -260,7 +256,7 @@
             $.isFunction(arg3) && arg3.call(this);
           });
 
-          return self;
+          return this;
         }
 
         $self.closest('.fht-table-wrapper')
@@ -270,7 +266,7 @@
 
 
 
-        return self;
+        return this;
       },
 
       /*
@@ -278,7 +274,6 @@
        */
       destroy: function() {
         var $self    = $(this),
-            self     = this,
             $wrapper = $self.closest('.fht-table-wrapper');
 
         $self.insertBefore($wrapper)
@@ -290,7 +285,7 @@
 
         $wrapper.remove();
 
-        return self;
+        return this;
       }
 
     };
@@ -303,17 +298,11 @@
        * True if a thead and tbody exist.
        */
       _isTable: function($obj) {
-        var $self = $obj,
-            hasTable = $self.is('table'),
-            hasThead = $self.find('thead').length > 0,
-            hasTbody = $self.find('tbody').length > 0;
+        var hasTable = $obj.is('table'),
+            hasThead = $obj.find('thead').length > 0,
+            hasTbody = $obj.find('tbody').length > 0;
 
-        if (hasTable && hasThead && hasTbody) {
-          return true;
-        }
-
-        return false;
-
+        return hasTable && hasThead && hasTbody;
       },
 
       /*
@@ -321,18 +310,17 @@
        * bind scroll event
        */
       _bindScroll: function($obj) {
-        var $self = $obj,
-            $wrapper = $self.closest('.fht-table-wrapper'),
-            $thead = $self.siblings('.fht-thead'),
-            $tfoot = $self.siblings('.fht-tfoot');
+        var $wrapper = $obj.closest('.fht-table-wrapper'),
+            $thead = $obj.siblings('.fht-thead'),
+            $tfoot = $obj.siblings('.fht-tfoot');
 
-        $self.bind('scroll', function() {
+        $obj.bind('scroll', function() {
           if (settings.fixedColumns > 0) {
             var $fixedColumns = $wrapper.find('.fht-fixed-column');
 
             $fixedColumns.find('.fht-tbody table')
               .css({
-                  'margin-top': -$self.scrollTop()
+                  'margin-top': -$obj.scrollTop()
               });
           }
 
@@ -389,8 +377,7 @@
        * return void
        */
       _setupFixedColumn: function ($obj, obj, tableProps) {
-        var $self             = $obj,
-            $wrapper          = $self.closest('.fht-table-wrapper'),
+        var $wrapper          = $obj.closest('.fht-table-wrapper'),
             $fixedBody        = $wrapper.find('.fht-fixed-body'),
             $fixedColumn      = $wrapper.find('.fht-fixed-column'),
             $thead            = $('<div class="fht-thead"><table class="fht-table"><thead><tr></tr></thead></table></div>'),
@@ -507,9 +494,8 @@
        * return void
        */
       _setupTableFooter: function ($obj, obj, tableProps) {
-        var $self     = $obj,
-            $wrapper  = $self.closest('.fht-table-wrapper'),
-            $tfoot    = $self.find('tfoot'),
+        var $wrapper  = $obj.closest('.fht-table-wrapper'),
+            $tfoot    = $obj.find('tfoot'),
             $divFoot  = $wrapper.find('div.fht-tfoot');
 
         if (!$divFoot.length) {
@@ -587,15 +573,14 @@
        * Fix widths of each cell in the first row of obj.
        */
       _setupClone: function($obj, cellArray) {
-        var $self    = $obj,
-            selector = ($self.find('thead').length) ?
+        var selector = ($obj.find('thead').length) ?
               'thead tr:first-child > *' :
-              ($self.find('tfoot').length) ?
+              ($obj.find('tfoot').length) ?
               'tfoot tr:first-child > *' :
               'tbody tr:first-child > *',
             $cell;
 
-        $self.find(selector).each(function(index) {
+        $obj.find(selector).each(function(index) {
           $cell = ($(this).find('div.fht-cell').length) ? $(this).find('div.fht-cell') : $('<div class="fht-cell"></div>').appendTo($(this));
 
           $cell.css({
