@@ -96,11 +96,11 @@
 
         $wrapper = $self.closest('.fht-table-wrapper');
 
-        if(settings.fixedColumn == true && settings.fixedColumns <= 0) {
+        if(settings.fixedColumn && settings.fixedColumns <= 0) {
           settings.fixedColumns = 1;
         }
 
-        if (settings.fixedColumns > 0 && $wrapper.find('.fht-fixed-column').length == 0) {
+        if (settings.fixedColumns > 0 && !$wrapper.find('.fht-fixed-column').length) {
           $self.wrap('<div class="fht-fixed-body"></div>');
 
           $('<div class="fht-fixed-column"></div>').prependTo($wrapper);
@@ -147,7 +147,7 @@
          * Check for footer
          * Setup footer if present
          */
-        if (settings.footer == true) {
+        if (settings.footer) {
           helpers._setupTableFooter($self, self, tableProps);
 
           if (!$tfoot.length) {
@@ -464,7 +464,7 @@
         // bind mousewheel events
         var maxTop = $fixedColumn.find('.fht-tbody .fht-table').height() - $fixedColumn.find('.fht-tbody').height();
         $fixedColumn.find('.fht-table').bind('mousewheel', function(event, delta, deltaX, deltaY) {
-          if (deltaY == 0) {
+          if (!deltaY) {
             return;
           }
           var top = parseInt($(this).css('marginTop'), 10) + (deltaY > 0 ? 120 : -120);
@@ -486,7 +486,7 @@
         });
 
         // setup clone footer with fixed column
-        if (settings.footer == true || settings.cloneHeadToFoot == true) {
+        if (settings.footer || settings.cloneHeadToFoot) {
           var $firstTdFootChild = $fixedBody.find('.fht-tfoot tr > *:lt(' + settings.fixedColumns + ')'),
               footwidth;
 
@@ -522,7 +522,7 @@
         $divFoot.find('table.fht-table').addClass(settings.originalTable.attr('class'));
 
         switch (true) {
-          case !$tfoot.length && settings.cloneHeadToFoot == true && settings.footer == true:
+          case !$tfoot.length && settings.cloneHeadToFoot && settings.footer:
 
             var $divHead = $wrapper.find('div.fht-thead');
 
@@ -532,7 +532,7 @@
               .appendTo($divFoot);
 
             break;
-          case $tfoot.length && settings.cloneHeadToFoot == false && settings.footer == true:
+          case $tfoot.length && !settings.cloneHeadToFoot && settings.footer:
 
             $divFoot.find('table')
               .append($tfoot)
@@ -561,7 +561,7 @@
             },
             borderCollapse = 1;
 
-        if (settings.borderCollapse == true) {
+        if (settings.borderCollapse) {
           borderCollapse = 2;
         }
 
