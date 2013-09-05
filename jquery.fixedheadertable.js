@@ -74,7 +74,7 @@
             tableProps,
             tbodyHeight;
 
-        settings.originalTable = $(this).clone();
+        settings.originalTable = $self.clone();
         settings.includePadding = helpers._isPaddingIncludedWithWidth();
         settings.scrollbarOffset = helpers._getScrollbarWidth();
         settings.themeClassName = settings.themeClass;
@@ -581,7 +581,9 @@
             padding;
 
         $obj.find(selector).each(function(index) {
-          $cell = ($(this).find('div.fht-cell').length) ? $(this).find('div.fht-cell') : $('<div class="fht-cell"></div>').appendTo($(this));
+          var $self = $(this);
+
+          $cell = ($self.find('div.fht-cell').length) ? $self.find('div.fht-cell') : $('<div class="fht-cell"></div>').appendTo($self);
 
           $cell.css({
             'width': parseInt(cellArray[index], 10)
@@ -591,9 +593,9 @@
            * Fixed Header and Footer should extend the full width
            * to align with the scrollbar of the body
            */
-          if (!$(this).closest('.fht-tbody').length && $(this).is(':last-child') && !$(this).closest('.fht-fixed-column').length) {
-            padding = Math.max((($(this).innerWidth() - $(this).width()) / 2), settings.scrollbarOffset);
-            $(this).css({
+          if (!$self.closest('.fht-tbody').length && $self.is(':last-child') && !$self.closest('.fht-fixed-column').length) {
+            padding = Math.max((($self.innerWidth() - $self.width()) / 2), settings.scrollbarOffset);
+            $self.css({
                 'padding-right': padding + 'px'
             });
           }
