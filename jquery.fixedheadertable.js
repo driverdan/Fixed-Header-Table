@@ -80,15 +80,14 @@
         settings.themeClassName = settings.themeClass;
 
         if (settings.width.search('%') > -1) {
-            widthMinusScrollbar = $self.parent().width() - settings.scrollbarOffset;
+          widthMinusScrollbar = $self.parent().width() - settings.scrollbarOffset;
         } else {
-            widthMinusScrollbar = settings.width - settings.scrollbarOffset;
+          widthMinusScrollbar = settings.width - settings.scrollbarOffset;
         }
 
         $self.css({
           width: widthMinusScrollbar
         });
-
 
         if (!$self.closest('.fht-table-wrapper').length) {
           $self.addClass('fht-table');
@@ -106,7 +105,7 @@
 
           $('<div class="fht-fixed-column"></div>').prependTo($wrapper);
 
-          $fixedBody    = $wrapper.find('.fht-fixed-body');
+          $fixedBody = $wrapper.find('.fht-fixed-body');
         }
 
         $wrapper.css({
@@ -195,8 +194,8 @@
        * Add CSS class to alternating rows
        */
       altRows: function(arg1) {
-        var $self = $(this),
-        altClass  = (typeof(arg1) !== 'undefined') ? arg1 : settings.altClass;
+        var $self    = $(this),
+            altClass = (typeof(arg1) !== 'undefined') ? arg1 : settings.altClass;
 
         $self.closest('.fht-table-wrapper')
           .find('tbody tr:odd:not(:hidden)')
@@ -207,8 +206,8 @@
        * Show a hidden fixedHeaderTable table
        */
       show: function(arg1, arg2, arg3) {
-        var $self   = $(this),
-            $wrapper  = $self.closest('.fht-table-wrapper');
+        var $self    = $(this),
+            $wrapper = $self.closest('.fht-table-wrapper');
 
         // User provided show duration without a specific effect
         if (typeof(arg1) !== 'undefined' && typeof(arg1) === 'number') {
@@ -217,7 +216,6 @@
           });
 
           return this;
-
         } else if (typeof(arg1) !== 'undefined' && typeof(arg1) === 'string' &&
           typeof(arg2) !== 'undefined' && typeof(arg2) === 'number') {
           // User provided show duration with an effect
@@ -227,7 +225,6 @@
           });
 
           return this;
-
         }
 
         $self.closest('.fht-table-wrapper')
@@ -241,8 +238,8 @@
        * Hide a fixedHeaderTable table
        */
       hide: function(arg1, arg2, arg3) {
-        var $self     = $(this),
-            $wrapper  = $self.closest('.fht-table-wrapper');
+        var $self    = $(this),
+            $wrapper = $self.closest('.fht-table-wrapper');
 
         // User provided show duration without a specific effect
         if (typeof(arg1) !== 'undefined' && typeof(arg1) === 'number') {
@@ -265,8 +262,6 @@
           .hide();
 
         $.isFunction(arg3) && arg3.call(this);
-
-
 
         return this;
       },
@@ -313,8 +308,8 @@
        */
       _bindScroll: function($obj) {
         var $wrapper = $obj.closest('.fht-table-wrapper'),
-            $thead = $obj.siblings('.fht-thead'),
-            $tfoot = $obj.siblings('.fht-tfoot');
+            $thead   = $obj.siblings('.fht-thead'),
+            $tfoot   = $obj.siblings('.fht-tfoot');
 
         $obj.bind('scroll', function() {
           if (settings.fixedColumns > 0) {
@@ -322,7 +317,7 @@
 
             $fixedColumns.find('.fht-tbody table')
               .css({
-                  'margin-top': -$obj.scrollTop()
+                'margin-top': -$obj.scrollTop()
               });
           }
 
@@ -372,7 +367,6 @@
             });
           });
         }
-
       },
 
       /*
@@ -394,7 +388,8 @@
             firstTdChildrenSelector,
             tdWidths,
             maxTop,
-            $firstTdFootChild;
+            $firstTdFootChild,
+            footwidth;
 
         $thead.find('table.fht-table').addClass(settings.originalTable.attr('class'));
         $tbody.find('table.fht-table').addClass(settings.originalTable.attr('class'));
@@ -479,8 +474,7 @@
 
         // setup clone footer with fixed column
         if (settings.footer || settings.cloneHeadToFoot) {
-          $firstTdFootChild = $fixedBody.find('.fht-tfoot tr > *:lt(' + settings.fixedColumns + ')'),
-              footwidth;
+          $firstTdFootChild = $fixedBody.find('.fht-tfoot tr > *:lt(' + settings.fixedColumns + ')');
 
           helpers._fixHeightWithCss($firstTdFootChild, tableProps);
           $tfoot.appendTo($fixedColumn)
@@ -536,7 +530,6 @@
 
             break;
         }
-
       },
 
       /*
@@ -634,7 +627,6 @@
         } else {
           return false;
         }
-
       },
 
       /*
@@ -675,22 +667,16 @@
 
     // if a method as the given argument exists
     if (methods[method]) {
-
       // call the respective method
       return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
-
       // if an object is given as method OR nothing is given as argument
     } else if (typeof method === 'object' || !method) {
-
       // call the initialization method
       return methods.init.apply(this, arguments);
-
       // otherwise
     } else {
-
       // trigger an error
       $.error('Method "' +  method + '" does not exist in fixedHeaderTable plugin!');
-
     }
 
   };
