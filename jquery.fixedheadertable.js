@@ -160,7 +160,7 @@
         tbodyHeight = $wrapper.height() - $thead.outerHeight(true) - tfootHeight - tableProps.border;
 
         $divBody.css({
-          'height': tbodyHeight
+          height: tbodyHeight
         });
 
         $self.addClass('fht-table-init');
@@ -341,11 +341,11 @@
       _fixHeightWithCss: function ($obj, tableProps) {
         if (settings.includePadding) {
           $obj.css({
-            'height': $obj.height() + tableProps.border
+            height: $obj.height() + tableProps.border
           });
         } else {
           $obj.css({
-            'height': $obj.parent().height() + tableProps.border
+            height: $obj.parent().height() + tableProps.border
           });
         }
       },
@@ -357,13 +357,13 @@
         if (settings.includePadding) {
           $obj.each(function() {
             $(this).css({
-              'width': width == undefined ? $(this).width() + tableProps.border : width + tableProps.border
+              width: width == undefined ? $(this).width() + tableProps.border : width + tableProps.border
             });
           });
         } else {
           $obj.each(function() {
             $(this).css({
-              'width': width == undefined ? $(this).parent().width() + tableProps.border : width + tableProps.border
+              width: width == undefined ? $(this).parent().width() + tableProps.border : width + tableProps.border
             });
           });
         }
@@ -425,7 +425,7 @@
         $tbody.appendTo($fixedColumn)
           .css({
             'margin-top': -1,
-            'height': fixedBodyHeight + tableProps.border
+            height: fixedBodyHeight + tableProps.border
           });
 
         $firstTdChildren.each(function(index) {
@@ -443,8 +443,8 @@
 
         // set width of fixed column wrapper
         $fixedColumn.css({
-          'height': 0,
-          'width': fixedColumnWidth
+          height: 0,
+          width: fixedColumnWidth
         });
 
 
@@ -469,7 +469,7 @@
 
         // set width of body table wrapper
         $fixedBody.css({
-          'width': fixedBodyWidth
+          width: fixedBodyWidth
         });
 
         // setup clone footer with fixed column
@@ -483,8 +483,8 @@
           // Set (view width) of $tfoot div to width of table (this accounts for footers with a colspan)
           footwidth = $tfoot.find('table').innerWidth();
           $tfoot.css({
-            'top': settings.scrollbarOffset,
-            'width': footwidth
+            top: settings.scrollbarOffset,
+            width: footwidth
           });
         }
       },
@@ -586,7 +586,7 @@
           $cell = ($self.find('div.fht-cell').length) ? $self.find('div.fht-cell') : $('<div class="fht-cell"></div>').appendTo($self);
 
           $cell.css({
-            'width': parseInt(cellArray[index], 10)
+            width: parseInt(cellArray[index], 10)
           });
 
           /*
